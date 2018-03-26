@@ -1,0 +1,11 @@
+hadoop273test:
+  build: .
+  hostname: hdp-rm1001.docker
+  ports:
+    - "8088:8088"
+    - "9000:9000"
+    - "19888:19888"
+    - "50070:50070"
+  environment:
+    TAG: RM
+
