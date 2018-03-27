@@ -1,11 +1,44 @@
-hadoop273test:
-  build: .
-  hostname: hdp-rm1001.docker
-  ports:
-    - "8088:8088"
-    - "9000:9000"
-    - "19888:19888"
-    - "50070:50070"
-  environment:
-    TAG: RM
+version: '2'
 
+services:
+  # RM
+  rm:
+    build: .
+    image: hadoop273test
+    hostname: hdp-rm1001.docker
+    container_name: container-hdp-rm1001
+    ports:
+      - "8088:8088"
+      - "9000:9000"
+      - "19888:19888"
+      - "50070:50070"
+    networks:
+      hadoop_nw:
+        ipv4_address: 192.168.56.2
+    environment:
+      TAG: RM
+
+  # NM
+  nm:
+    build: .
+    image: hadoop273test
+    hostname: hdp-nm2001.docker
+    container_name: container-hdp-nm2001
+    ports:
+      - "50010:50010"
+    networks:
+      hadoop_nw:
+        ipv4_address: 192.168.56.3
+    extra_hosts:
+      - "hdp-rm1001.docker:192.168.56.2"
+    environment:
+      TAG: NM
+
+networks:
+  hadoop_nw:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 192.168.56.0/24
+        gateway: 192.168.56.254
