@@ -3,7 +3,7 @@
 <configuration>
   <property>
     <name>yarn.nodemanager.hostname</name>
-    <value>hdp-nm1001.docker</value>
+    <value>hdp-nm2001.docker</value>
   </property>
 
   <property>
@@ -19,14 +19,14 @@
   <!--property>
     <name>yarn.nodemanager.resource.memory-mb</name>
     <value>512</value>
-  </property>
+  </property-->
 
   <property>
     <name>yarn.scheduler.minimum-allocation-mb</name>
     <value>256</value>
   </property>
 
-  <property>
+  <!--property>
     <name>yarn.scheduler.maximum-allocation-mb</name>
     <value>512</value>
   </property>

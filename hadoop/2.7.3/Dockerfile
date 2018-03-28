@@ -6,7 +6,7 @@ USER root
 # install dev tools
 RUN yum clean all; \
     rpm --rebuilddb; \
-    yum install -y curl which tar sudo openssh-server openssh-clients rsync
+    yum install -y curl which tar sudo openssh-server openssh-clients rsync wget
 RUN yum update -y libselinux
 
 # passwordless ssh
@@ -130,6 +130,10 @@ RUN chmod -R 755 $MAPRED_PID_DIR
 ENV HADOOP_CONF_DIR /etc/hadoop/conf
 RUN chown -R $HDFS_USER:$HADOOP_GROUP $HADOOP_CONF_DIR/../
 RUN chmod -R 755 $HADOOP_CONF_DIR/../
+
+# Spark
+RUN yum install -y spark_2_6_2_0_205-master
+RUN chown spark:hadoop /var/log/spark
 
 COPY files/hadoop/* /etc/hadoop/conf/
 COPY cmd.sh /

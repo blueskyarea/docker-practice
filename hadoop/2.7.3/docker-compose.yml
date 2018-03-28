@@ -14,7 +14,9 @@ services:
       - "50070:50070"
     networks:
       hadoop_nw:
-        ipv4_address: 192.168.56.2
+        ipv4_address: 172.20.0.2
+    extra_hosts:
+      - "hdp-nm2001.docker:172.20.0.3"
     environment:
       TAG: RM
 
@@ -28,9 +30,9 @@ services:
       - "50010:50010"
     networks:
       hadoop_nw:
-        ipv4_address: 192.168.56.3
+        ipv4_address: 172.20.0.3
     extra_hosts:
-      - "hdp-rm1001.docker:192.168.56.2"
+      - "hdp-rm1001.docker:172.20.0.2"
     environment:
       TAG: NM
 
@@ -40,5 +42,5 @@ networks:
     ipam:
       driver: default
       config:
-      - subnet: 192.168.56.0/24
-        gateway: 192.168.56.254
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.254
