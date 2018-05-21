@@ -131,11 +131,15 @@ ENV HADOOP_CONF_DIR /etc/hadoop/conf
 RUN chown -R $HDFS_USER:$HADOOP_GROUP $HADOOP_CONF_DIR/../
 RUN chmod -R 755 $HADOOP_CONF_DIR/../
 
+# HBase
+RUN yum install -y hbase
+
 # Spark
 RUN yum install -y spark_2_6_2_0_205-master
 RUN chown spark:hadoop /var/log/spark
 
 COPY files/hadoop/* /etc/hadoop/conf/
+COPY hdfs-setup.sh / 
 COPY cmd.sh /
 
 EXPOSE 8088 9000 19888 50070

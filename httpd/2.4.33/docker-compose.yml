@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  dev-httpd:
+    image: mh/httpd
+    container_name: my-httpd-container2
+    ports:
+      - "8080:80"
+    volumes:
+      - "/home/mh/workspace/dockers/httpd/2.4.33/html:/usr/local/apache2/htdocs"
+
+  dev-mysql:
+    image: mysql:5.7
+    container_name: my-mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: userdb
+    ports:
+      - "3306:3306"
+
