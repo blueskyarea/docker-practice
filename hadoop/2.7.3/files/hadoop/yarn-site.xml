@@ -81,6 +81,11 @@
   </property>
 
   <property>
+    <name>yarn.nodemanager.vmem-check-enabled</name>
+    <value>false</value>
+  </property>
+
+  <property>
     <description>List of directories to store localized files in.</description>
     <name>yarn.nodemanager.local-dirs</name>
     <value>/grid/hadoop/cache/yarn/local</value>
@@ -101,6 +106,11 @@
   <property>
     <name>yarn.log.server.url</name>
     <value>http://hdp-rm1001.docker:19888/jobhistory/logs</value>
+  </property>
+
+  <property>
+    <name>yarn.nodemanager.address</name>
+    <value>0.0.0.0:45454</value>
   </property>
 
   <property>

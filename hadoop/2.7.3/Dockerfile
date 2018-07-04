@@ -16,11 +16,12 @@ RUN ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa
 RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 
 # java
-RUN curl -LO 'http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.rpm' -H 'Cookie: oraclelicense=accept-securebackup-cookie'
-RUN rpm -i jdk-8u161-linux-x64.rpm
-RUN rm jdk-8u161-linux-x64.rpm
+#RUN curl -LO 'http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.rpm' -H 'Cookie: oraclelicense=accept-securebackup-cookie'
+#RUN rpm -i jdk-8u161-linux-x64.rpm
+#RUN rm jdk-8u161-linux-x64.rpm
+#ENV JAVA_HOME /usr/java/default
 
-ENV JAVA_HOME /usr/java/default
+RUN yum install -y java-1.8.0-openjdk
 ENV PATH $PATH:$JAVA_HOME/bin
 RUN rm /usr/bin/java && ln -s $JAVA_HOME/bin/java /usr/bin/java
 
@@ -33,6 +34,7 @@ ENV ZOOKEEPER_USER zookeeper
 ENV ZOOKEEPER_LOG_DIR /var/log/zookeeper
 ENV ZOOKEEPER_PID_DIR /var/run/zookeeper
 ENV ZOOKEEPER_DATA_DIR /grid/hadoop/zookeeper/data
+ENV ZOOKEEPER_CONF_DIR /etc/zookeeper/conf
 
 RUN yum install -y zookeeper-server hadoop
 
@@ -47,6 +49,12 @@ RUN chmod -R 755 $ZOOKEEPER_PID_DIR
 RUN mkdir -p $ZOOKEEPER_DATA_DIR
 RUN chmod -R 755 $ZOOKEEPER_DATA_DIR
 RUN chown -R $ZOOKEEPER_USER:$HADOOP_GROUP $ZOOKEEPER_DATA_DIR
+
+RUN rm -r $ZOOKEEPER_CONF_DIR
+RUN mkdir -p $ZOOKEEPER_CONF_DIR
+RUN chmod a+x $ZOOKEEPER_CONF_DIR
+RUN chown -R $ZOOKEEPER_USER:$HADOOP_GROUP $ZOOKEEPER_CONF_DIR/../
+RUN chmod 755 $ZOOKEEPER_CONF_DIR/../
 
 # hadoop
 RUN umask 0022
@@ -134,15 +142,36 @@ RUN chmod -R 755 $HADOOP_CONF_DIR/../
 # HBase
 RUN yum install -y hbase
 
+# HBase configuration
+ENV HBASE_LOG_DIR /var/log/hbase
+ENV HBASE_USER hbase
+ENV HBASE_PID_DIR /var/run/hbase
+ENV HBASE_CONF_DIR /etc/hbase/conf
+RUN mkdir -p $HBASE_LOG_DIR
+RUN chown -R $HBASE_USER:$HADOOP_GROUP $HBASE_LOG_DIR
+RUN chmod -R 755 $HBASE_LOG_DIR
+RUN chown -R $HBASE_USER:$HADOOP_GROUP $HBASE_PID_DIR
+RUN chmod -R 755 $HBASE_PID_DIR
+
+RUN rm -r $HBASE_CONF_DIR
+RUN mkdir -p $HBASE_CONF_DIR
+RUN chmod a+x $HBASE_CONF_DIR/
+RUN chown -R $HBASE_USER:$HADOOP_GROUP $HBASE_CONF_DIR/../
+RUN chmod -R 755 $HBASE_CONF_DIR/../
+
 # Spark
-RUN yum install -y spark_2_6_2_0_205-master
+RUN yum install -y spark_2_6_2_0_205-master spark_2_6_2_0_205-python
 RUN chown spark:hadoop /var/log/spark
 
+COPY files/zookeeper/* $ZOOKEEPER_CONF_DIR/
+COPY files/hbase/* $HBASE_CONF_DIR/
 COPY files/hadoop/* /etc/hadoop/conf/
 COPY hdfs-setup.sh / 
+COPY start-zookeeper.sh /
+COPY start-hbase.sh /
 COPY cmd.sh /
 
-EXPOSE 8088 9000 19888 50070
+EXPOSE 8020 8040 8088 9000 19888 50070
 
 CMD ["/cmd.sh"]
 
