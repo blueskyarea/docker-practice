@@ -22,6 +22,7 @@ RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 #ENV JAVA_HOME /usr/java/default
 
 RUN yum install -y java-1.8.0-openjdk
+ENV JAVA_HOME /usr/lib/jvm/jre
 ENV PATH $PATH:$JAVA_HOME/bin
 RUN rm /usr/bin/java && ln -s $JAVA_HOME/bin/java /usr/bin/java
 
