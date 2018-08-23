@@ -46,6 +46,9 @@ services:
     image: hadoop273
     hostname: hdp-hmaster3001.docker
     container_name: container-hdp-hmaster3001
+    depends_on:
+      - "rm1001"
+      - "nm2001"
     expose:
       - "8020"
     networks:
