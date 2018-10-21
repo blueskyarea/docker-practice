@@ -24,6 +24,25 @@ function retryRequest () {
   done
 }
 
+function retryCommand () {
+  count=0
+  retry_upper_limit=5
+  cmd=$1
+  while :
+  do
+    ${cmd}
+    res=$?
+    if [ $res != 0 ] ; then
+      break
+    fi
+    count=$(expr $count + 1)
+    if [ ${count} -gt ${retry_upper_limit} ] ; then
+      exit -1
+    fi
+    sleep 5s
+  done
+}
+
 # waiting for finishing to start couchbase-server
 retryRequest "http://localhost:8091"
 
@@ -36,3 +55,8 @@ retryRequest "-u admin:password -v -X POST http://localhost:8091/pools/default/b
 # Setup Index RAM Quota
 retryRequest "-u admin:password -v -X POST http://localhost:8091/pools/default -d memoryQuota=2000&indexMemoryQuota=269"
 
+# Setup cluster
+if [ "${TAG}" = 'PRI' ]; then
+  retryCommand "/opt/couchbase/bin/couchbase-cli rebalance -c 172.25.0.1:8091 -u admin -p password --server-add=172.25.0.2:8091 --server-add-username=admin --server-add-password=password"
+  retryCommand "/opt/couchbase/bin/couchbase-cli rebalance -c 172.25.0.1:8091 -u admin -p password --server-add=172.25.0.3:8091 --server-add-username=admin --server-add-password=password"
+fi

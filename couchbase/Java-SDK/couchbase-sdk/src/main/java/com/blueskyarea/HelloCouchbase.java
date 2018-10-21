@@ -14,13 +14,18 @@ import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.CouchbaseCluster;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.json.JsonObject;
+import com.couchbase.client.java.env.CouchbaseEnvironment;
+import com.couchbase.client.java.env.DefaultCouchbaseEnvironment;
 
 public class HelloCouchbase {
 	// connection
-	private String serverIp = "172.17.0.3";
+	private String serverIp = "172.25.0.1";
 	private String bucketName = "default";
 	private String password = "";
-	private Cluster cluster = CouchbaseCluster.create(serverIp);
+	private CouchbaseEnvironment env = DefaultCouchbaseEnvironment.builder()
+            .connectTimeout(60000) //60000ms = 60s, default is 5s
+            .build();
+	private Cluster cluster = CouchbaseCluster.create(env, serverIp);
 	private Bucket bucket = cluster.openBucket(bucketName, password);
 	private StopWatch stopWatch = new StopWatch();
 	

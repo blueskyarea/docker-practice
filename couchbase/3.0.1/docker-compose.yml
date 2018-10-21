@@ -1,0 +1,62 @@
+version: '2'
+
+services:
+  cb-svr001:
+    build: ./
+    image: my/couch:3.0.1
+    hostname: cb-svr001.docker
+    container_name: container-cb-svr001
+    ports:
+      - "8091:8091"
+      - "8092:8092"
+    networks:
+      couch_nw:
+        ipv4_address: 172.25.0.1
+    extra_hosts:
+      - "cb-svr002.docker:172.25.0.2"
+      - "cb-svr003.docker:172.25.0.3"
+    environment:
+      TAG: PRI
+
+  cb-svr002:
+    build: ./
+    image: my/couch:3.0.1
+    hostname: cb-svr002.docker
+    container_name: container-cb-svr002
+    ports:
+      - "8093:8091"
+      - "8094:8092"
+    networks:
+      couch_nw:
+        ipv4_address: 172.25.0.2
+    extra_hosts:
+      - "cb-svr001.docker:172.25.0.1"
+      - "cb-svr003.docker:172.25.0.3"
+    environment:
+      TAG: SEC
+
+  cb-svr003:
+    build: ./
+    image: my/couch:3.0.1
+    hostname: cb-svr003.docker
+    container_name: container-cb-svr003
+    ports:
+      - "8095:8091"
+      - "8096:8092"
+    networks:
+      couch_nw:
+        ipv4_address: 172.25.0.3
+    extra_hosts:
+      - "cb-svr001.docker:172.25.0.1"
+      - "cb-svr002.docker:172.25.0.2"
+    environment:
+      TAG: SEC
+
+networks:
+  couch_nw:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.0.0/16
+          gateway: 172.25.0.254

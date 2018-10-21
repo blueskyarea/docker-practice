@@ -22,7 +22,11 @@ RUN rpm -ivh http://packages.couchbase.com/releases/3.0.1/couchbase-server-commu
 ADD scripts/start-couchbase.sh /usr/bin/start-couchbase.sh
 RUN chmod +x /usr/bin/start-couchbase.sh
 
-# configuration for supervisor(zookeeper & kafka)
+# script for monitoring tool
+ADD scripts/monitor-stats.sh /usr/bin/monitor-stats.sh
+RUN chmod +x /usr/bin/monitor-stats.sh
+
+# configuration for supervisor(couchbase)
 ADD config/supervisor/couchbase.conf supervisord.conf.from.local/
 RUN cat /supervisord.conf.from.local/couchbase.conf >> /etc/supervisord.conf
 
