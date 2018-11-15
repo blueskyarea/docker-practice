@@ -1,0 +1,13 @@
+# truncate tables;
+truncate table answer_records;
+truncate table dummy_answers;
+truncate table questions;
+truncate table categories;
+truncate table answers;
+truncate table users;
+alter table answer_records AUTO_INCREMENT = 1;
+alter table dummy_answers AUTO_INCREMENT = 1;
+alter table questions AUTO_INCREMENT = 1;
+alter table categories AUTO_INCREMENT = 1;
+alter table answers AUTO_INCREMENT = 1;
+alter table answers AUTO_INCREMENT = 1;

@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  play:
+    build: ./
+    image: my/play:2.4
+    container_name: my-play
+    environment:
+      TERM: xterm
