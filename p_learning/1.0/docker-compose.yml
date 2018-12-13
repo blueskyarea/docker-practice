@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  p-learning:
+    build: ./
+    image: my/p_learning:1.0
+    hostname: pl-svr001.docker
+    container_name: container-pl-svr001
+    volumes:
+     - "/home/mh/workspace/html:/var/www/html"
+    networks:
+     pl_nw:
+       ipv4_address: 172.28.0.2
+
+networks:
+  pl_nw:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+
