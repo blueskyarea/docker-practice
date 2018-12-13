@@ -1,0 +1,62 @@
+version: '2'
+
+services:
+  cb-svr101:
+    build: ./
+    image: my/couchbase:4.5.1
+    hostname: cb-svr101.docker
+    container_name: container-cb-svr101
+    ports:
+      - "8091:8091"
+      - "8092:8092"
+    networks:
+      couch_nw:
+        ipv4_address: 172.26.0.1
+    extra_hosts:
+      - "cb-svr102.docker:172.26.0.2"
+      - "cb-svr103.docker:172.26.0.3"
+    environment:
+      TAG: PRI
+
+  cb-svr102:
+    build: ./
+    image: my/couchbase:4.5.1
+    hostname: cb-svr102.docker
+    container_name: container-cb-svr102
+    ports:
+      - "8093:8091"
+      - "8094:8092"
+    networks:
+      couch_nw:
+        ipv4_address: 172.26.0.2
+    extra_hosts:
+      - "cb-svr101.docker:172.26.0.1"
+      - "cb-svr103.docker:172.26.0.3"
+    environment:
+      TAG: SEC
+
+  cb-svr103:
+    build: ./
+    image: my/couchbase:4.5.1
+    hostname: cb-svr103.docker
+    container_name: container-cb-svr103
+    ports:
+      - "8095:8091"
+      - "8096:8092"
+    networks:
+      couch_nw:
+        ipv4_address: 172.26.0.3
+    extra_hosts:
+      - "cb-svr101.docker:172.26.0.1"
+      - "cb-svr102.docker:172.26.0.2"
+    environment:
+      TAG: SEC
+
+networks:
+  couch_nw:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.26.0.0/16
+          gateway: 172.26.0.254
