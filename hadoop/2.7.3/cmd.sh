@@ -10,6 +10,8 @@ if [ "$TAG" = 'RM' ]; then
   /bin/bash /hdfs-setup.sh &&
   while true; do sleep 1000; done 
 elif [ "$TAG" = 'NM' ]; then
+  rm -rf /grid/hadoop/hdfs/dn/* &&
+  sleep 30 &&
   /usr/hdp/2.6.2.0-205/hadoop-yarn/sbin/yarn-daemon.sh start nodemanager &&
   /usr/hdp/2.6.2.0-205/hadoop/sbin/hadoop-daemon.sh start datanode &&
   /bin/bash /start-zookeeper.sh &&
