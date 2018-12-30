@@ -60,6 +60,26 @@ services:
     environment:
       TAG: HMASTER
 
+  # hue
+  hue:
+    build:
+      context: .
+      dockerfile: Dockerfile.hue
+    hostname: hdp-hue.docker
+    container_name: container-hdp-hue
+    ports:
+      - "8000:8000"
+    depends_on:
+      - "rm1001"
+    networks:
+      hadoop_nw:
+        ipv4_address: 172.20.0.6
+    extra_hosts:
+      - "hdp-rm1001.docker:172.20.0.2"
+      - "hdp-nm2001.docker:172.20.0.3"
+    environment:
+      TAG: HUE
+
 networks:
   hadoop_nw:
     driver: bridge
