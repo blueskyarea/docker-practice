@@ -11,6 +11,7 @@
     <property>
     <name>hbase.rootdir</name>
     <value>hdfs://hdp-rm1001.docker:9000/apps/hbase/data</value>
+    <description>port 8020 was not working</description>
   </property>
     <property>
     <name>hfile.block.cache.size</name>
@@ -22,7 +23,7 @@
   </property>
     <property>
     <name>hbase.zookeeper.quorum</name>
-    <value>hdp-nm2001.docker</value>
+    <value>hdp-hmaster3001.docker</value>
   </property>
     <property>
     <name>zookeeper.session.timeout</name>
