@@ -20,6 +20,9 @@ elif [ "$TAG" = 'HMASTER' ]; then
   /bin/bash /start-zookeeper.sh &&
   /bin/bash /start-hbase.sh &&
   while true; do sleep 1000; done
+elif [ "$TAG" = 'HUE' ]; then
+  /bin/bash /etc/init.d/hue start &&
+  while true; do sleep 1000; done
 else
   while true; do sleep 1000; done
 fi
