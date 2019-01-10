@@ -51,10 +51,6 @@ RUN chmod a+x $ZOOKEEPER_CONF_DIR
 RUN chown -R $ZOOKEEPER_USER:$HADOOP_GROUP $ZOOKEEPER_CONF_DIR/../
 RUN chmod 755 $ZOOKEEPER_CONF_DIR/../
 
-# hadoop
-#RUN umask 0022
-#RUN yum install -y hadoop-hdfs hadoop-libhdfs hadoop-yarn hadoop-mapreduce hadoop-client openssl
-
 # Snappy
 RUN yum install -y snappy snappy-devel
 
