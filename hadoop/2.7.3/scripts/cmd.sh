@@ -21,6 +21,7 @@ if [ "$TAG" = 'RM' ]; then
   /usr/hdp/2.6.2.0-205/hadoop/sbin/hadoop-daemon.sh start namenode &&
   sleep 60 &&
   /bin/bash /hdfs-setup.sh &&
+  /usr/hdp/2.6.2.0-205/hadoop-mapreduce/sbin/mr-jobhistory-daemon.sh start historyserver &&
   while true; do sleep 1000; done 
 elif [ "$TAG" = 'NM' ]; then
   rm -rf /grid/hadoop/hdfs/dn/* &&
