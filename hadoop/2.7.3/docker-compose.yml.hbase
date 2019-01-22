@@ -1,0 +1,93 @@
+version: '2'
+
+services:
+  # RM
+  rm1001:
+    build: 
+      context: .
+      dockerfile: ./Dockerfiles/Dockerfile.hadoop
+    image: hadoop273
+    hostname: hdp-rm1001.docker
+    container_name: container-hdp-rm1001
+    ports:
+      - "8040:8040"
+      - "8088:8088"
+      - "9000:9000"
+      - "19888:19888"
+      - "50070:50070"
+    networks:
+      hadoop_nw:
+        ipv4_address: 172.20.0.2
+    extra_hosts:
+      - "hdp-nm2001.docker:172.20.0.3"
+    environment:
+      TAG: RM
+
+  # NM
+  nm2001:
+    build: 
+      context: .
+      dockerfile: ./Dockerfiles/Dockerfile.hadoop
+    image: hadoop273
+    hostname: hdp-nm2001.docker
+    container_name: container-hdp-nm2001
+    ports:
+      - "45454:45454"
+      - "50010:50010"
+    depends_on:
+      - "rm1001"
+    networks:
+      hadoop_nw:
+        ipv4_address: 172.20.0.3
+    extra_hosts:
+      - "hdp-rm1001.docker:172.20.0.2"
+    environment:
+      TAG: NM
+
+  # Hbase
+  hmaster3001:
+    build:
+      context: .
+      dockerfile: ./Dockerfiles/Dockerfile.hbase
+    hostname: hdp-hmaster3001.docker
+    container_name: container-hdp-hmaster3001
+    depends_on:
+      - "rm1001"
+      - "nm2001"
+    expose:
+      - "8020"
+    networks:
+      hadoop_nw:
+        ipv4_address: 172.20.0.5
+    extra_hosts:
+      - "hdp-rm1001.docker:172.20.0.2"
+      - "hdp-nm2001.docker:172.20.0.3"
+      - "hdp-hmaster3001.docker:172.20.0.5"
+    environment:
+      TAG: HMASTER
+
+  # Spark
+  spark4001:
+    build:
+      context: .
+      dockerfile: ./Dockerfiles/Dockerfile.spark
+    hostname: hdp-spark4001.docker
+    container_name: container-hdp-spark4001
+    expose:
+      - "18080"
+    networks:
+      hadoop_nw:
+        ipv4_address: 172.20.0.6
+    extra_hosts:
+      - "hdp-rm1001.docker:172.20.0.2"
+      - "hdp-nm2001.docker:172.20.0.3"
+      - "hdp-hmaster3001.docker:172.20.0.5"
+
+networks:
+  hadoop_nw:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.254

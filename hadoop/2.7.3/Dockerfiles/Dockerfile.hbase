@@ -80,6 +80,7 @@ RUN chmod -R 755 $HBASE_CONF_DIR/../
 # copy files
 COPY files/zookeeper/* $ZOOKEEPER_CONF_DIR/
 COPY files/hbase/* $HBASE_CONF_DIR/
+COPY files/init/init-hbase.txt /
 COPY scripts/start-zookeeper.sh /
 COPY scripts/start-hbase.sh /
 COPY scripts/cmd.sh /

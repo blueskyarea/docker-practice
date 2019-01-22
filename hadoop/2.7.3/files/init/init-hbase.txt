@@ -1,0 +1,4 @@
+create_namespace 'my_ns'
+create 'my_ns:my_table', {NAME => 'data1'}
+put 'my_ns:my_table','key1','data1:q1','value2'
+exit
