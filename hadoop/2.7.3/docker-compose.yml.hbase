@@ -15,6 +15,7 @@ services:
       - "9000:9000"
       - "19888:19888"
       - "50070:50070"
+    mem_limit: 1g
     networks:
       hadoop_nw:
         ipv4_address: 172.20.0.2
@@ -34,6 +35,7 @@ services:
     ports:
       - "45454:45454"
       - "50010:50010"
+    mem_limit: 1g
     depends_on:
       - "rm1001"
     networks:
@@ -49,8 +51,10 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfiles/Dockerfile.hbase
+    image: hbase273
     hostname: hdp-hmaster3001.docker
     container_name: container-hdp-hmaster3001
+    mem_limit: 1g
     depends_on:
       - "rm1001"
       - "nm2001"
@@ -71,8 +75,10 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfiles/Dockerfile.spark
+    image: spark273
     hostname: hdp-spark4001.docker
     container_name: container-hdp-spark4001
+    mem_limit: 1g
     expose:
       - "18080"
     networks:
