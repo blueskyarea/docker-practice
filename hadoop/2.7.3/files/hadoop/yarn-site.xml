@@ -3,7 +3,7 @@
 <configuration>
   <property>
     <name>yarn.nodemanager.hostname</name>
-    <value>hdp-nm2001.docker</value>
+    <value>0.0.0.0</value>
   </property>
 
   <property>
