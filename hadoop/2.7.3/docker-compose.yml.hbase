@@ -36,7 +36,7 @@ services:
     ports:
       - "45454:45454"
       - "50010:50010"
-    mem_limit: 1g
+    mem_limit: 1500m
     depends_on:
       - "rm1001"
     networks:
@@ -44,6 +44,7 @@ services:
         ipv4_address: 172.20.0.3
     extra_hosts:
       - "hdp-rm1001.docker:172.20.0.2"
+      - "hdp-nm2002.docker:172.20.0.4"
     environment:
       TAG: NM
 
@@ -58,7 +59,7 @@ services:
     ports:
       - "45455:45454"
       - "50011:50010"
-    mem_limit: 1g
+    mem_limit: 1500m
     depends_on:
       - "rm1001"
     networks:
@@ -66,33 +67,34 @@ services:
         ipv4_address: 172.20.0.4
     extra_hosts:
       - "hdp-rm1001.docker:172.20.0.2"
+      - "hdp-nm2001.docker:172.20.0.3"
     environment:
       TAG: NM  
 
-  # Hbase
-  hmaster3001:
-    build:
-      context: .
-      dockerfile: ./Dockerfiles/Dockerfile.hbase
-    image: hbase273
-    hostname: hdp-hmaster3001.docker
-    container_name: container-hdp-hmaster3001
-    mem_limit: 1g
-    depends_on:
-      - "rm1001"
-      - "nm2001"
-    expose:
-      - "8020"
-    networks:
-      hadoop_nw:
-        ipv4_address: 172.20.0.5
-    extra_hosts:
-      - "hdp-rm1001.docker:172.20.0.2"
-      - "hdp-nm2001.docker:172.20.0.3"
-      - "hdp-nm2002.docker:172.20.0.4"
-      - "hdp-hmaster3001.docker:172.20.0.5"
-    environment:
-      TAG: HMASTER
+#  # Hbase
+#  hmaster3001:
+#    build:
+#      context: .
+#      dockerfile: ./Dockerfiles/Dockerfile.hbase
+#    image: hbase273
+#    hostname: hdp-hmaster3001.docker
+#    container_name: container-hdp-hmaster3001
+#    mem_limit: 1g
+#    depends_on:
+#      - "rm1001"
+#      - "nm2001"
+#    expose:
+#      - "8020"
+#    networks:
+#      hadoop_nw:
+#        ipv4_address: 172.20.0.5
+#    extra_hosts:
+#      - "hdp-rm1001.docker:172.20.0.2"
+#      - "hdp-nm2001.docker:172.20.0.3"
+#      - "hdp-nm2002.docker:172.20.0.4"
+#      - "hdp-hmaster3001.docker:172.20.0.5"
+#    environment:
+#      TAG: HMASTER
 
   # Spark
   spark4001:
@@ -113,6 +115,10 @@ services:
       - "hdp-nm2001.docker:172.20.0.3"
       - "hdp-nm2002.docker:172.20.0.4"
       - "hdp-hmaster3001.docker:172.20.0.5"
+    volumes:
+      - "/home/mh/workspace/spark/spark-test1.6/target:/spark-app"
+    environment:
+      TAG: SPARK
 
 networks:
   hadoop_nw:
