@@ -9,6 +9,7 @@ services:
     ports:
       - "8091:8091"
       - "8092:8092"
+    mem_limit: 512m
     networks:
       couch_nw:
         ipv4_address: 172.25.0.1
@@ -26,6 +27,7 @@ services:
     ports:
       - "8093:8091"
       - "8094:8092"
+    mem_limit: 512m
     networks:
       couch_nw:
         ipv4_address: 172.25.0.2
@@ -43,6 +45,7 @@ services:
     ports:
       - "8095:8091"
       - "8096:8092"
+    mem_limit: 512m
     networks:
       couch_nw:
         ipv4_address: 172.25.0.3

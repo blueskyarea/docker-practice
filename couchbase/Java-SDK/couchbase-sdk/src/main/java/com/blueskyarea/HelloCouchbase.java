@@ -1,7 +1,14 @@
 package com.blueskyarea;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.time.StopWatch;
@@ -9,13 +16,14 @@ import org.apache.commons.lang3.time.StopWatch;
 import rx.Observable;
 import rx.functions.Func1;
 
-import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.CouchbaseCluster;
+import com.couchbase.client.java.*;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.json.JsonObject;
 import com.couchbase.client.java.env.CouchbaseEnvironment;
 import com.couchbase.client.java.env.DefaultCouchbaseEnvironment;
+import com.couchbase.client.java.view.ViewQuery;
+import com.couchbase.client.java.view.ViewResult;
+import com.couchbase.client.java.view.ViewRow;
 
 public class HelloCouchbase {
 	// connection
@@ -26,17 +34,19 @@ public class HelloCouchbase {
             .connectTimeout(60000) //60000ms = 60s, default is 5s
             .build();
 	private Cluster cluster = CouchbaseCluster.create(env, serverIp);
-	private Bucket bucket = cluster.openBucket(bucketName, password);
+	//private Bucket bucket = cluster.openBucket(bucketName, password);
 	private StopWatch stopWatch = new StopWatch();
 	
-    public static void main( String[] args )    {
+    public static void main( String[] args ) throws URISyntaxException, IOException {
     	HelloCouchbase client = new HelloCouchbase();
     	//client.execute();
     	//client.bigPut();
-    	client.bulkPut();
+    	//client.bulkPut();
+    	client.getKeys();
     }
     
     protected void execute() {
+    	Bucket bucket = cluster.openBucket(bucketName, password);
     	// data preparation
     	JsonObject user = JsonObject.empty()
     		    .put("firstname", "Walter")
@@ -70,7 +80,8 @@ public class HelloCouchbase {
     	cluster.disconnect();
     }
     
-    protected void bigPut() {   	
+    protected void bigPut() {
+    	Bucket bucket = cluster.openBucket(bucketName, password);
     	// data preparation
     	stopWatch.start();
     	IntStream.range(0, 100000).forEach(i -> {
@@ -91,7 +102,7 @@ public class HelloCouchbase {
     }
     
     protected void bulkPut(){
-    	
+    	Bucket bucket = cluster.openBucket(bucketName, password);
     	stopWatch.start();
     	
     	List<JsonDocument> jsons = new ArrayList<>();
@@ -123,6 +134,23 @@ public class HelloCouchbase {
     	stopWatch.reset();
     	
     	// disconnection
+    	cluster.disconnect();
+    }
+    
+    protected void getKeys() throws URISyntaxException, IOException {
+    	cluster.clusterManager("", "");
+    	Bucket bucket = cluster.openBucket(bucketName, password);
+    	ViewQuery q = ViewQuery.from("doc", "test_view")
+    		    .limit(5) // Limit to 5 results
+    		    .startKey("walter")
+    		    .endKey("walter\uefff");
+    	
+    	ViewResult result = bucket.query(q);
+    	for (ViewRow row : result) {
+    	    System.out.println(row);
+    	}
+    	
+    	bucket.close();
     	cluster.disconnect();
     }
 }
