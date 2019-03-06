@@ -35,9 +35,9 @@ services:
     ports:
       - "45454:45454"
       - "50010:50010"
+    mem_limit: 1500m
     depends_on:
       - "rm1001"
-    mem_limit: 1g
     networks:
       hadoop_nw:
         ipv4_address: 172.20.0.3
@@ -45,6 +45,26 @@ services:
       - "hdp-rm1001.docker:172.20.0.2"
     environment:
       TAG: NM
+
+  # Spark
+  spark4001:
+    build:
+      context: .
+      dockerfile: ./Dockerfiles/Dockerfile.spark
+    image: spark273
+    hostname: hdp-spark4001.docker
+    container_name: container-hdp-spark4001
+    mem_limit: 1g
+    expose:
+      - "18080"
+    networks:
+      hadoop_nw:
+        ipv4_address: 172.20.0.6
+    extra_hosts:
+      - "hdp-rm1001.docker:172.20.0.2"
+      - "hdp-nm2001.docker:172.20.0.3"
+    environment:
+      TAG: SPARK
 
 networks:
   hadoop_nw:

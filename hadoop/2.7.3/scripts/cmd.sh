@@ -41,7 +41,7 @@ elif [ "$TAG" = 'HUE' ]; then
   while true; do sleep 1000; done
 elif [ "$TAG" = 'SPARK' ]; then
   if [ ! -d /spark-app ]; then
-    /bin/bash mkdir /spark-app
+    mkdir /spark-app
   fi
   while true; do sleep 1000; done
 else
