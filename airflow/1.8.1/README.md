@@ -1,4 +1,4 @@
-### Step 1: Build image of kafka
+### Step 1: Build image of airflow
 1. Go to directory that has Dockerfile.
 
 2. Execute below command to build image.
@@ -15,13 +15,13 @@ REPOSITORY          TAG                 IMAGE ID            CREATED             
 my/airflow          1.8.1               035cc6521841        14 seconds ago      2.19GB
 ```
 
-### Step 2: Create container of kafka & run
+### Step 2: Create container of airflow & run
 1. Execute below command to create container & start.
 ```
 docker run -d --name my-airflow -p 8080:8080 my/airflow:1.8.1
 ```
 
-2. Access to web console.
+2. Access to airflow web console.
 ```
 http://localhost:8080
 -> it may take 1 min to be able to access.
