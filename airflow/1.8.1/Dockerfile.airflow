@@ -1,0 +1,31 @@
+FROM centos:centos6 
+LABEL maintainer "blueskyarea"
+
+# install common tools
+RUN yum update -y libselinux; \
+    yum groupinstall -y "Development tools"; \
+    yum install -y vim wget zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel unzip mysql-devel
+
+# install mysql
+RUN rpm -ivh http://dev.mysql.com/get/mysql57-community-release-el6-7.noarch.rpm; \
+    yum install -y mysql-community-server mysql-devel
+
+# install python
+RUN yum install -y https://centos6.iuscommunity.org/ius-release.rpm; \
+    yum install -y python36*; \
+    ln -s /usr/bin/python3.6 /usr/bin/python3; \
+    ln -s /usr/bin/pip3.6 /usr/bin/pip3
+
+# install Airflow
+ENV AIRFLOW_VERSION=1.8.1
+ENV AIRFLOW_HOME=/usr/local/airflow
+RUN export AIRFLOW_HOME
+RUN pip3 install "apache-airflow[mysql, celery]==${AIRFLOW_VERSION}"; \
+    pip3 install celery==3.1.17; \
+    mkdir -p ${AIRFLOW_HOME}
+
+EXPOSE 8080 
+COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
+COPY scripts/cmd.sh /
+CMD ["/cmd.sh"]
+
