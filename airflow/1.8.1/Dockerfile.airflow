@@ -22,9 +22,9 @@ ENV AIRFLOW_HOME=/usr/local/airflow
 RUN export AIRFLOW_HOME
 RUN pip3 install "apache-airflow[mysql, celery]==${AIRFLOW_VERSION}"; \
     pip3 install celery==3.1.17; \
-    mkdir -p ${AIRFLOW_HOME}/dags
+    mkdir -p ${AIRFLOW_HOME}/{dags,logs}
 
-EXPOSE 8080 
+EXPOSE 8080 3306 
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 COPY scripts/cmd.sh /
 CMD ["/cmd.sh"]
