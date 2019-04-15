@@ -1,0 +1,40 @@
+2019-04-06T15:07:25.489487Z 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).
+2019-04-06T15:07:36.237469Z 0 [Warning] InnoDB: New log files created, LSN=45790
+2019-04-06T15:07:36.757412Z 0 [Warning] InnoDB: Creating foreign key constraint system tables.
+2019-04-06T15:07:36.864217Z 0 [Warning] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: b6914948-587d-11e9-801f-0242ac110002.
+2019-04-06T15:07:36.867375Z 0 [Warning] Gtid table is not ready to be used. Table 'mysql.gtid_executed' cannot be opened.
+2019-04-06T15:07:36.869096Z 1 [Note] A temporary password is generated for root@localhost: >1ZeSNGprg!)
+2019-04-06T15:07:44.151091Z 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).
+2019-04-06T15:07:44.152598Z 0 [Note] /usr/sbin/mysqld (mysqld 5.7.25) starting as process 531 ...
+2019-04-06T15:07:44.157241Z 0 [Note] InnoDB: PUNCH HOLE support available
+2019-04-06T15:07:44.157286Z 0 [Note] InnoDB: Mutexes and rw_locks use GCC atomic builtins
+2019-04-06T15:07:44.157300Z 0 [Note] InnoDB: Uses event mutexes
+2019-04-06T15:07:44.157312Z 0 [Note] InnoDB: GCC builtin __sync_synchronize() is used for memory barrier
+2019-04-06T15:07:44.157325Z 0 [Note] InnoDB: Compressed tables use zlib 1.2.11
+2019-04-06T15:07:44.157337Z 0 [Note] InnoDB: Using Linux native AIO
+2019-04-06T15:07:44.157598Z 0 [Note] InnoDB: Number of pools: 1
+2019-04-06T15:07:44.157710Z 0 [Note] InnoDB: Using CPU crc32 instructions
+2019-04-06T15:07:44.159290Z 0 [Note] InnoDB: Initializing buffer pool, total size = 128M, instances = 1, chunk size = 128M
+2019-04-06T15:07:44.171277Z 0 [Note] InnoDB: Completed initialization of buffer pool
+2019-04-06T15:07:44.173194Z 0 [Note] InnoDB: If the mysqld execution user is authorized, page cleaner thread priority can be changed. See the man page of setpriority().
+2019-04-06T15:07:44.187094Z 0 [Note] InnoDB: Highest supported file format is Barracuda.
+2019-04-06T15:07:44.202833Z 0 [Note] InnoDB: Creating shared tablespace for temporary tables
+2019-04-06T15:07:44.202946Z 0 [Note] InnoDB: Setting file './ibtmp1' size to 12 MB. Physically writing the file full; Please wait ...
+2019-04-06T15:07:44.256469Z 0 [Note] InnoDB: File './ibtmp1' size is now 12 MB.
+2019-04-06T15:07:44.258822Z 0 [Note] InnoDB: 96 redo rollback segment(s) found. 96 redo rollback segment(s) are active.
+2019-04-06T15:07:44.258850Z 0 [Note] InnoDB: 32 non-redo rollback segment(s) are active.
+2019-04-06T15:07:44.260835Z 0 [Note] InnoDB: Waiting for purge to start
+2019-04-06T15:07:44.311278Z 0 [Note] InnoDB: 5.7.25 started; log sequence number 2524303
+2019-04-06T15:07:44.315854Z 0 [Note] InnoDB: Loading buffer pool(s) from /var/lib/mysql/ib_buffer_pool
+2019-04-06T15:07:44.316674Z 0 [Note] Plugin 'FEDERATED' is disabled.
+2019-04-06T15:07:44.328685Z 0 [Note] InnoDB: Buffer pool(s) load completed at 190406 15:07:44
+2019-04-06T15:07:44.332909Z 0 [Note] Found ca.pem, server-cert.pem and server-key.pem in data directory. Trying to enable SSL support using them.
+2019-04-06T15:07:44.333420Z 0 [Warning] CA certificate ca.pem is self signed.
+2019-04-06T15:07:44.337568Z 0 [Note] Server hostname (bind-address): '*'; port: 3306
+2019-04-06T15:07:44.337680Z 0 [Note] IPv6 is available.
+2019-04-06T15:07:44.337723Z 0 [Note]   - '::' resolves to '::';
+2019-04-06T15:07:44.337764Z 0 [Note] Server socket created on IP: '::'.
+2019-04-06T15:07:44.368116Z 0 [Note] Event Scheduler: Loaded 0 events
+2019-04-06T15:07:44.368597Z 0 [Note] /usr/sbin/mysqld: ready for connections.
+Version: '5.7.25'  socket: '/var/lib/mysql/mysql.sock'  port: 3306  MySQL Community Server (GPL)
+2019-04-06T15:07:44.639403Z 2 [Note] Access denied for user 'UNKNOWN_MYSQL_USER'@'localhost' (using password: NO)
