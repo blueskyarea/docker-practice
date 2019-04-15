@@ -11,6 +11,8 @@ docker build -t my/bash-challenge:1.0.0 -f Dockerfile .
 docker images
 ```
 ```
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+my/bash-challenge   1.0.0               2dda34ccce16        19 minutes ago      232MB
 ```
 
 ### Challenge 1: Get initial temporary mysql password from log
@@ -20,6 +22,7 @@ docker images
 ```
 
 2. Try to get initial temporary mysql password from log
+
 HINT1: Target file is /var/log/mysqld.log
 
 3. To stop challenge environment
