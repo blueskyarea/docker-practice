@@ -1,0 +1,70 @@
+FROM centos:centos7
+LABEL  maintainer "blueskyarea"
+
+# install dev tools
+RUN yum update -y libselinux; \
+    yum install -y wget curl which tar sudo openssh-server openssh-clients rsync; \
+    yum clean all
+
+# java
+RUN yum install -y java-1.8.0-openjdk
+ENV JAVA_HOME /usr/lib/jvm/jre
+ENV PATH $PATH:$JAVA_HOME/bin
+RUN rm /usr/bin/java && ln -s $JAVA_HOME/bin/java /usr/bin/java
+RUN echo -e '\n# java\nexport JAVA_HOME=/usr/lib/jvm/jre\nPATH=${PATH}:${JAVA_HOME}/bin' >> /etc/profile
+
+# hdp repo
+RUN wget -nv http://public-repo-1.hortonworks.com/HDP/centos7/2.x/updates/2.6.2.0/hdp.repo -O /etc/yum.repos.d/hdp.repo
+
+# install hadoop
+RUN yum install -y hadoop hadoop-hdfs hadoop-yarn hadoop-mapreduce
+
+ENV HADOOP_GROUP hadoop
+ENV HADOOP_CONF_DIR /etc/hadoop/conf
+RUN chown -R $HDFS_USER:$HADOOP_GROUP $HADOOP_CONF_DIR/../
+RUN chmod -R 755 $HADOOP_CONF_DIR/../
+
+# HDFS Logs
+ENV HDFS_LOG_DIR /var/log/hadoop/hdfs
+RUN mkdir -p $HDFS_LOG_DIR
+RUN chown -R $HDFS_USER:$HADOOP_GROUP $HDFS_LOG_DIR
+RUN chmod -R 755 $HDFS_LOG_DIR
+
+# Yarn Logs
+ENV YARN_LOG_DIR /var/log/hadoop/yarn
+RUN mkdir -p $YARN_LOG_DIR
+RUN chown -R $YARN_USER:$HADOOP_GROUP $YARN_LOG_DIR
+RUN chmod -R 755 $YARN_LOG_DIR
+
+# HDFS Process
+ENV HDFS_PID_DIR /var/run/hadoop/hdfs
+RUN mkdir -p $HDFS_PID_DIR
+RUN chown -R $HDFS_USER:$HADOOP_GROUP $HDFS_PID_DIR
+RUN chmod -R 755 $HDFS_PID_DIR
+
+# Yarn Process ID
+ENV YARN_PID_DIR /var/run/hadoop/yarn
+RUN mkdir -p $YARN_PID_DIR
+RUN chown -R $YARN_USER:$HADOOP_GROUP $YARN_PID_DIR
+RUN chmod -R 755 $YARN_PID_DIR
+
+# JobHistory Server Logs
+ENV MAPRED_LOG_DIR /var/log/hadoop/mapred
+ENV MAPRED_USER mapred
+RUN mkdir -p $MAPRED_LOG_DIR
+RUN chown -R $MAPRED_USER:$HADOOP_GROUP $MAPRED_LOG_DIR
+RUN chmod -R 755 $MAPRED_LOG_DIR
+
+# JobHistory Server Process ID
+ENV MAPRED_PID_DIR /var/run/hadoop/mapred
+RUN mkdir -p $MAPRED_PID_DIR
+RUN chown -R $MAPRED_USER:$HADOOP_GROUP $MAPRED_PID_DIR
+RUN chmod -R 755 $MAPRED_PID_DIR
+
+COPY files/hadoop/* /etc/hadoop/conf/
+COPY scripts/cmd.sh /
+
+EXPOSE 8020 8040 8088 9000 19888 50070
+
+CMD ["/cmd.sh"]
+
