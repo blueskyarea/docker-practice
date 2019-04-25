@@ -35,7 +35,7 @@ services:
     ports:
       - "45454:45454"
       - "50010:50010"
-    mem_limit: 1500m
+    mem_limit: 1g
     depends_on:
       - "rm1001"
     networks:
