@@ -18,7 +18,7 @@ my/airflow          1.8.1               035cc6521841        14 seconds ago      
 ### Step 2: Create container of airflow & run
 1. Execute below command to create container & start.
 ```
-docker run -d --name my-airflow -p 8080:8080 -v $PWD/dags:/usr/local/airflow/dags my/airflow:1.8.1
+docker run -d --name my-airflow -p 8080:8080 -m "2048M" --rm -v $PWD/dags:/usr/local/airflow/dags my/airflow:1.8.1
 ```
 
 2. Access to airflow web console.
@@ -30,11 +30,6 @@ http://localhost:8080
 3. Stop the container.
 ```
 docker stop my-airflow
-```
-
-### Step 3: Start the created container
-```
-docker start my-airflow
 ```
 
 ### Option1: Remove the created container
