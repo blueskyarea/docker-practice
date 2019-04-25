@@ -6,4 +6,5 @@ RUN yum update -y libselinux; \
     yum clean all
 
 COPY files/mysqld.log /var/log/mysqld.log
-
+COPY files/slider.log /var/log/slider.log
+COPY files/slider2.log /var/log/slider2.log

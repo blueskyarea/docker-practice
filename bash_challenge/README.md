@@ -14,20 +14,24 @@ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 my/bash-challenge   1.0.0               2dda34ccce16        19 minutes ago      232MB
 ```
-
-### Challenge 1: Get initial temporary mysql password from log
+### Challenge start and stop
 1. To start challenge environment
 ```
 ./start-challenge.sh
 ```
 
-2. Try to get initial temporary mysql password from log
-
-HINT1: Target file is /var/log/mysqld.log
-
-3. To stop challenge environment
+2. To stop challenge environment
 ```
 ./stop-challenge.sh
 ```
-Answer : >1ZeSNGprg!)
+
+### Challenge 1: Get initial temporary mysql password from log
+Target file is /var/log/mysqld.log
+
+Required value : >1ZeSNGprg!)
+
+### Challenge 2: Get value of org.apache.slider.hbase.rest
+Target file are /var/log/slider.log & /var/log/slider2.log
+
+Required value : http://server4:50000
 
