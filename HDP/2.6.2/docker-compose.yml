@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: ./Dockerfile.cluster
     image: my/hdp-cluster
-    hostname: spark-master
-    container_name: my-spark-master
+    hostname: hdp-spark-master
+    container_name: my-hdp-spark-master
     ports:
       - "8040:8040"
       - "8088:8088"
@@ -15,6 +15,37 @@ services:
       - "19888:19888"
       - "50070:50070"
     mem_limit: 1g
+    networks:
+      hadoop_nw:
+        ipv4_address: 172.30.0.2
     environment:
       TAG: MASTER
+
+  client:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.client
+    image: my/hdp-client
+    hostname: hdp-spark-client
+    container_name: my-hdp-spark-client
+    ports:
+      - "8080:8080"
+    mem_limit: 1g
+    networks:
+      hadoop_nw:
+        ipv4_address: 172.30.0.10
+    extra_hosts:
+      - "hdp-spark-master:172.30.0.2"
+    environment:
+      TAG: CLIENT
+    command: tail -F anything
+
+networks:
+  hadoop_nw:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.30.0.0/16
+          gateway: 172.30.0.254
 

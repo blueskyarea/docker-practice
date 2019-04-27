@@ -3,7 +3,7 @@
 <configuration>
   <property>
     <name>yarn.nodemanager.hostname</name>
-    <value>spark-master</value>
+    <value>hdp-spark-master</value>
   </property>
 
   <property>
@@ -48,25 +48,25 @@
 
   <property>
     <name>yarn.resourcemanager.resource-tracker.address</name>
-    <value>spark-master:8025</value>
+    <value>hdp-spark-master:8025</value>
     <description>Enter your ResourceManager hostname.</description>
   </property>
 
   <property>
     <name>yarn.resourcemanager.scheduler.address</name>
-    <value>spark-master:8030</value>
+    <value>hdp-spark-master:8030</value>
     <description>Enter your ResourceManager hostname.</description>
   </property>
 
   <property>
     <name>yarn.resourcemanager.address</name>
-    <value>spark-master:8050</value>
+    <value>hdp-spark-master:8050</value>
     <description>Enter your ResourceManager hostname.</description>
   </property>
 
   <property>
     <name>yarn.resourcemanager.admin.address</name>
-    <value>spark-master:8141</value>
+    <value>hdp-spark-master:8141</value>
     <description>Enter your ResourceManager hostname.</description>
   </property>
 
@@ -105,7 +105,7 @@
 
   <property>
     <name>yarn.log.server.url</name>
-    <value>http://spark-master:19888/jobhistory/logs</value>
+    <value>http://hdp-spark-master:19888/jobhistory/logs</value>
   </property>
 
   <property>

@@ -1,9 +1,12 @@
 ### Step 1: Build image of airflow
 1. Go to directory that has Dockerfile.
 
-2. Execute below command to build image.
+2. Execute below command to build cluster & client image.
 ```
 docker build -t my/hdp-cluster:2.6.2 -f Dockerfile.cluster .
+```
+```
+docker build -t my/hdp-client:2.6.2 -f Dockerfile.client .
 ```
 
 3. Confirm the created image.
@@ -28,5 +31,8 @@ docker-compose up --build -d
 ### Step 3: Stop the container
 ```
 docker stop my-spark-master
+```
+```
+docker stop my-spark-cilent
 ```
 
