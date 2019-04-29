@@ -39,8 +39,13 @@ RUN chmod -R 755 $HDFS_PID_DIR
 # install spark
 RUN yum install -y spark2_2_6_2_0_205-master
 RUN chown spark:hadoop /var/log/spark
+RUN mkdir /spark
+
+# for Japanese on spark shell
+ENV JAVA_TOOL_OPTIONS='-Dfile.encoding=UTF8'
 
 COPY files/hadoop/* /etc/hadoop/conf/
+COPY files/spark /spark/
 
 EXPOSE 8080
 

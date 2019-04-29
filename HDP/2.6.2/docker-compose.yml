@@ -18,8 +18,29 @@ services:
     networks:
       hadoop_nw:
         ipv4_address: 172.30.0.2
+    extra_hosts:
+      - "hdp-spark-worker:172.30.0.3"
     environment:
       TAG: MASTER
+
+  worker:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.cluster
+    image: my/hdp-cluster
+    hostname: hdp-spark-worker
+    container_name: my-hdp-spark-worker
+    ports:
+      - "45454:45454"
+      - "50010:50010"
+    mem_limit: 2g
+    networks:
+      hadoop_nw:
+        ipv4_address: 172.30.0.3
+    extra_hosts:
+      - "hdp-spark-master:172.30.0.2"
+    environment:
+      TAG: WORKER
 
   client:
     build:
@@ -36,6 +57,7 @@ services:
         ipv4_address: 172.30.0.10
     extra_hosts:
       - "hdp-spark-master:172.30.0.2"
+      - "hdp-spark-worker:172.30.0.3"
     environment:
       TAG: CLIENT
     command: tail -F anything

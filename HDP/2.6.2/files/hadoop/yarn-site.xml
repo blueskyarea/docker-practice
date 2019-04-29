@@ -3,7 +3,7 @@
 <configuration>
   <property>
     <name>yarn.nodemanager.hostname</name>
-    <value>hdp-spark-master</value>
+    <value>hdp-spark-worker</value>
   </property>
 
   <property>
@@ -59,6 +59,11 @@
   </property>
 
   <property>
+    <name>yarn.nodemanager.localizer.address</name>
+    <value>hdp-spark-worker:8040</value>
+  </property>
+  <property>
+
     <name>yarn.resourcemanager.address</name>
     <value>hdp-spark-master:8050</value>
     <description>Enter your ResourceManager hostname.</description>
