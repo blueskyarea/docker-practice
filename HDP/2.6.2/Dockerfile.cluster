@@ -62,6 +62,8 @@ RUN chown -R $MAPRED_USER:$HADOOP_GROUP $MAPRED_PID_DIR
 RUN chmod -R 755 $MAPRED_PID_DIR
 
 COPY files/hadoop/* /etc/hadoop/conf/
+COPY files/spark /spark/
+COPY scripts/hdfs-setup.sh /
 COPY scripts/cmd.sh /
 
 EXPOSE 8020 8040 8088 9000 19888 50070
