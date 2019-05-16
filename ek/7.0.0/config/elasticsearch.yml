@@ -1,0 +1,9 @@
+cluster.name: "docker-cluster"
+node.name: "node1"
+node.master: true
+node.data: true
+network.host: 0.0.0.0
+network.publish_host: _local_
+discovery.seed_hosts: ["172.40.0.1"]
+cluster.initial_master_nodes: ["node1"]
+

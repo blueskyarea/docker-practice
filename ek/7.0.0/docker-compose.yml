@@ -1,0 +1,47 @@
+version: '2'
+services:
+  elasticsearch:
+    build: elasticsearch
+    hostname: doc-es
+    container_name: my-doc-es
+    volumes:
+        - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+        - 9200:9200
+    mem_limit: 2g
+    networks:
+        ek_nw:
+            ipv4_address: 172.40.0.1
+    expose:
+        - 9300
+    volumes:
+        - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    extra_hosts:
+        - "doc-kibana:172.40.0.2"
+  kibana:
+    build: kibana
+    hostname: doc-kibana
+    container_name: my-doc-kibana
+    ports:
+        - 5601:5601
+    mem_limit: 512m
+    networks:
+        ek_nw:
+            ipv4_address: 172.40.0.2
+    volumes:
+       - ./config/kibana.yml:/usr/share/kibana/config/kibana.yml
+    extra_hosts:
+        - "doc-es:172.40.0.1"
+
+volumes:
+    elasticsearch-data:
+        driver: local
+
+networks:
+  ek_nw:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.40.0.0/16
+          gateway: 172.40.0.254
