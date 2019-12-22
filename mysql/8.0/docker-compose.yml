@@ -1,0 +1,23 @@
+version: "3"
+services:
+  mysql8-db:
+    build:
+      context: "."
+      dockerfile: Dockerfile
+    volumes:
+      - db8-store:/var/lib/mysql
+      - db8-log-store:/var/log/mysql
+      - ./conf/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./tmp/LearningSQLExample.sql:/tmp/LearningSQLExample.sql
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASS}
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
+      - TZ=${TZ}
+    ports:
+      - ${DB_PORT}:3306
+
+volumes:
+  db8-store:
+  db8-log-store:
