@@ -1,0 +1,13 @@
+server.name: kibana
+server.host: "0"
+elasticsearch.hosts: [ "http://doc-elastic101:9200","http://doc-elastic102:9200","http://doc-elastic103:9200" ]
+elasticsearch.requestTimeout: 60000
+elasticsearch.username: "kibana"
+elasticsearch.password: "2LvV2Bm9llnwbttb6FIf"
+
+# xpack
+xpack.monitoring.ui.container.elasticsearch.enabled: true
+
+# elastalert-kibana-plugin
+#elastalert-kibana-plugin.serverHost: elastalert
+#elastalert-kibana-plugin.serverPort: 3030
