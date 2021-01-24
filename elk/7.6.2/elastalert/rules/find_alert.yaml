@@ -1,0 +1,25 @@
+es_host: doc-elastic101
+es_port: 9200
+name: Rule file error
+type: frequency
+index: filebeat-*
+is_enabled: true
+
+num_events: 1
+timeframe:
+    hours: 1
+filter:
+- query:
+   query_string:
+     query: "message: *ERROR*"
+
+#subject to email
+alert_subject: "Found ERROR"
+
+alert:
+- "email"
+email: "xxx@example.com"
+smtp_host: "172.60.0.7"
+smtp_port: 1025
+smtp_ssl: false
+from_addr: "elastalert@mailcatcher"

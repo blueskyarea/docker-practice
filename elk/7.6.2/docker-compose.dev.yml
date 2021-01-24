@@ -1,0 +1,121 @@
+version: '2.2'
+services:
+    elasticsearch1:
+        build:
+            context: elasticsearch/
+        hostname: doc-elastic101
+        container_name: es01
+        environment:
+            - node.name=es01
+            - cluster.name=es-docker-cluster
+            - discovery.seed_hosts=es02,es03
+            - cluster.initial_master_nodes=es01,es02,es03
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        ports:
+            - "9200:9200/tcp"
+        networks:
+            elk_nw:
+                ipv4_address: 172.60.0.2
+        volumes:
+            - elasticsearch-data1:/usr/share/elasticsearch/data
+        extra_hosts:
+            - "doc-elastic102:172.60.0.12"
+            - "doc-elastic103:172.60.0.13"
+            - "doc-kibana101:172.60.0.4"
+
+    elasticsearch2:
+        build:
+            context: elasticsearch/
+        hostname: doc-elastic102
+        container_name: es02
+        environment:
+            - node.name=es02
+            - cluster.name=es-docker-cluster
+            - discovery.seed_hosts=es01,es03
+            - cluster.initial_master_nodes=es01,es02,es03
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        networks:
+            elk_nw:
+                ipv4_address: 172.60.0.12
+        volumes:
+            - elasticsearch-data2:/usr/share/elasticsearch/data
+        extra_hosts:
+            - "doc-elastic101:172.60.0.2"
+            - "doc-elastic103:172.60.0.13"
+            - "doc-kibana101:172.60.0.4"
+    
+    elasticsearch3:
+        build:
+            context: elasticsearch/
+        hostname: doc-elastic103
+        container_name: es03
+        environment:
+            - node.name=es03
+            - cluster.name=es-docker-cluster
+            - discovery.seed_hosts=es01,es02
+            - cluster.initial_master_nodes=es01,es02,es03
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        networks:
+            elk_nw:
+                ipv4_address: 172.60.0.13
+        volumes:
+            - elasticsearch-data3:/usr/share/elasticsearch/data
+        extra_hosts:
+            - "doc-elastic101:172.60.0.2"
+            - "doc-elastic102:172.60.0.12"
+            - "doc-kibana101:172.60.0.4"
+
+    kibana:
+        build:
+            context: kibana/
+        hostname: doc-kibana101
+        container_name: kibana1
+        command: sh -c './bin/kibana-plugin list | grep elastalert-kibana-plugin@1.1.0; result=`echo $$?`; if [ $$result = 1 ]; then  ./bin/kibana-plugin install file:///usr/share/kibana/work/elastalert-kibana-plugin-1.1.0-7.6.2.zip && exec /usr/local/bin/kibana-docker; else exec /usr/local/bin/kibana-docker; fi'
+        ports:
+            - "5601:5601/tcp"
+        networks:
+            elk_nw:
+                ipv4_address: 172.60.0.4
+        volumes:
+            - ./kibana/config/kibana.xml:/usr/share/kibana/config/kibana.yml
+            - ./kibana/plugin:/usr/share/kibana/work
+        extra_hosts:
+            - "doc-elastic101:172.60.0.2"
+            - "doc-elastic102:172.60.0.12"
+            - "doc-elastic103:172.60.0.13"
+        depends_on:
+            - elasticsearch1
+            - elasticsearch2
+            - elasticsearch3
+
+volumes:
+    elasticsearch-data1:
+        driver: local
+    elasticsearch-data2:
+        driver: local
+    elasticsearch-data3:
+        driver: local
+
+networks:
+    elk_nw:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.60.0.0/16
+

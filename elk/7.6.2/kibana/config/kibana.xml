@@ -1,0 +1,9 @@
+server.name: kibana
+server.host: "0"
+elasticsearch.hosts: [ "http://doc-elastic101:9200" ]
+xpack.monitoring.ui.container.elasticsearch.enabled: true
+elasticsearch.requestTimeout: 60000
+
+# elastalert-kibana-plugin
+elastalert-kibana-plugin.serverHost: elastalert
+elastalert-kibana-plugin.serverPort: 3030

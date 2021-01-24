@@ -1,0 +1,149 @@
+version: '3.2'
+services:
+    elasticsearch:
+        build:
+            context: elasticsearch/
+        hostname: doc-elastic101
+        container_name: elastic1
+        ports:
+            - "9200:9200/tcp"
+            - "9300:9300/tcp"
+        deploy:
+            resources:
+                limits:
+                    memory: 2G
+        networks:
+            elk_nw:
+                ipv4_address: 172.60.0.2
+        volumes:
+          - type: bind
+            source: ./elasticsearch/config/elasticsearch.yml
+            target: /usr/share/elasticsearch/config/elasticsearch.yml
+            read_only: true
+          - type: volume
+            source: elasticsearch-data
+            target: /usr/share/elasticsearch/data
+        extra_hosts:
+            - "doc-kibana101:172.60.0.4"
+            - "doc-logstash101:172.60.0.3"
+
+    logstash:
+        build:
+            context: logstash/
+        hostname: doc-logstash101
+        container_name: logstash1
+        ports:
+            - "5043-5100:5043-5100/tcp"
+        deploy:
+            resources:
+                limits:
+                    memory: 1G
+        networks:
+            elk_nw:
+                ipv4_address: 172.60.0.3
+        extra_hosts:
+            - "doc-elastic101:172.60.0.2"
+            - "doc-kibana101:172.60.0.4"
+        environment:
+            LS_JAVA_OPTS: "-Xmx512m -Xms512m"
+        depends_on:
+            - elasticsearch
+
+    kibana:
+        build:
+            context: kibana/
+        hostname: doc-kibana101
+        container_name: kibana1
+        command: sh -c './bin/kibana-plugin list | grep elastalert-kibana-plugin@1.1.0; result=`echo $$?`; if [ $$result = 1 ]; then  ./bin/kibana-plugin install file:///usr/share/kibana/work/elastalert-kibana-plugin-1.1.0-7.6.2.zip && exec /usr/local/bin/kibana-docker; else exec /usr/local/bin/kibana-docker; fi'
+        ports:
+            - "5601:5601/tcp"
+        deploy:
+            resources:
+                limits:
+                    memory: 1G
+        networks:
+            elk_nw:
+                ipv4_address: 172.60.0.4
+        volumes:
+            - type: bind
+              source: ./kibana/config/kibana.xml
+              target: /usr/share/kibana/config/kibana.yml
+              read_only: true
+            - type: bind
+              source: ./kibana/plugin
+              target: /usr/share/kibana/work
+              read_only: true
+        extra_hosts:
+            - "doc-elastic101:172.60.0.2"
+            - "doc-logstash101:172.60.0.3"
+        depends_on:
+            - elasticsearch
+
+    elastalert:
+        container_name: elastalert
+        build:
+            context: .
+            dockerfile: elastalert/Dockerfile
+        image: elastalert:0.2.1
+        ports:
+            - 3030:3030
+            - 3333:3333
+        depends_on:
+            - elasticsearch
+            - kibana
+        networks:
+            elk_nw:
+                ipv4_address: 172.60.0.5
+        volumes:
+            - ./elastalert/config/elastalert.yaml:/opt/elastalert/config.yaml
+            - ./elastalert/config/elastalert-test.yaml:/opt/elastalert/config-test.yaml
+            - ./elastalert/config/config.json:/opt/elastalert-server/config/config.json
+            - ./elastalert/rules:/opt/elastalert/rules
+            - ./elastalert/rule_templates:/opt/elastalert/rule_templates
+            - ./elastalert/pass:/opt/elastalert/pass
+        extra_hosts:
+            - "doc-elastic101:172.60.0.2"
+            - "doc-logstash101:172.60.0.3"
+            - "doc-kibana101:172.60.0.4"
+            - "doc-smtp101:172.60.0.7"
+
+    filebeat:
+        build:
+            context: filebeat/
+        hostname: doc-filebeat101
+        container_name: filebeat1
+        networks:
+            elk_nw:
+                ipv4_address: 172.60.0.6
+        volumes:
+          - type: bind
+            source: ./filebeat/logs
+            target: /usr/share/filebeat/logs
+        extra_hosts:
+            - "doc-elastic101:172.60.0.2"
+            - "doc-kibana101:172.60.0.4"
+        depends_on:
+            - elasticsearch
+
+    smtp:
+        image: schickling/mailcatcher
+        hostname: doc-smtp101
+        container_name: smtp1
+        networks:
+            elk_nw:
+                ipv4_address: 172.60.0.7
+        ports:
+            - 1080:1080
+            - 1025:1025
+
+volumes:
+    elasticsearch-data:
+        driver: local
+
+networks:
+    elk_nw:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.60.0.0/16
