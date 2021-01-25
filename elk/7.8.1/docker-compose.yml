@@ -10,7 +10,8 @@ services:
             - node.name=es01
             - node.master=true
             - node.data=true
-            - discovery.seed_hosts=es02,es03
+            - node.ingest=true
+            - discovery.seed_hosts=es01,es02,es03
             - cluster.initial_master_nodes=es01,es02,es03
             - bootstrap.memory_lock=true
             - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -41,7 +42,8 @@ services:
             - node.name=es02
             - node.master=true
             - node.data=true
-            - discovery.seed_hosts=es01,es03
+            - node.ingest=true
+            - discovery.seed_hosts=es01,es02,es03
             - cluster.initial_master_nodes=es01,es02,es03
             - bootstrap.memory_lock=true
             - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -50,6 +52,8 @@ services:
                 soft: -1
                 hard: -1
         mem_limit: 1g
+        ports:
+            - "9201:9200/tcp"
         networks:
             spark-nw:
                 ipv4_address: 172.30.10.2
@@ -70,7 +74,8 @@ services:
             - node.name=es03
             - node.master=true
             - node.data=true
-            - discovery.seed_hosts=es01,es02
+            - node.ingest=true
+            - discovery.seed_hosts=es01,es02,es03
             - cluster.initial_master_nodes=es01,es02,es03
             - bootstrap.memory_lock=true
             - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -79,6 +84,8 @@ services:
                 soft: -1
                 hard: -1
         mem_limit: 1g
+        ports:
+            - "9202:9200/tcp"
         networks:
             spark-nw:
                 ipv4_address: 172.30.10.3
