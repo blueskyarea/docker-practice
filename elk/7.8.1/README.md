@@ -1,13 +1,14 @@
-#### Start cluster
+### Start cluster
 ```
 $ docker-compose up --build -d
 ```
 
-#### Stop cluster
+### Stop cluster
 ```
 $ docker stop $(docker ps -q)
 ```
 
+### Elasticsearch
 #### Check cluster info
 ```
 $ curl -XGET http://localhost:9200/_cluster/health?pretty
@@ -55,6 +56,57 @@ $ curl -XGET http://localhost:9201/_cat/master?v=true
 id                     host        ip          node
 GJCtO6DxTOuAnnB4SushXQ 172.30.10.3 172.30.10.3 es03
 $ curl -XGET http://localhost:9202/_cat/master?v=true
+id                     host        ip          node
+GJCtO6DxTOuAnnB4SushXQ 172.30.10.3 172.30.10.3 es03
+``` 
+
+### Kibana
+#### Access to Kibana
+http://localhost:5601
+
+If not started yet, check with below command.
+```
+$ docker logs -f kibana1
+```
+
+If you find below message, you should can open kibana.
+```
+"message":"http server running at http://0:5601"}
+```
+
+#### Try Dev Tools
+Open Dev Tools and try to execute on the Console.
+1.
+```
+GET _search
+{
+  "query":{
+    "match_all": {}
+  }
+}
+```
+
+Response like below.
+```
+{
+  "took" : 36,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 5,
+    "successful" : 5,
+    "skipped" : 0,
+    "failed" : 0
+  },
+...
+```
+
+2.
+```
+GET _cat/master?v=true
+```
+
+Response
+```
 id                     host        ip          node
 GJCtO6DxTOuAnnB4SushXQ 172.30.10.3 172.30.10.3 es03
 ```
