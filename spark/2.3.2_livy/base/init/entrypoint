@@ -1,0 +1,20 @@
+#!/bin/bash
+
+function livy_server_service(){
+  export SPARK_HOME=/spark/
+  echo "starting Livy Server!"
+  /opt/apache-livy-0.7.0-incubating-bin/bin/livy-server start 
+
+  # whatever blocking call 
+  tail -f /dev/null
+}
+
+function start(){
+  livy_server_service
+}
+
+function main(){
+  start
+}
+
+main
