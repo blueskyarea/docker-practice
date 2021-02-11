@@ -1,0 +1,78 @@
+version: '2'
+services:
+    elasticsearch:
+        build: ./elasticsearch
+        hostname: doc-elastic101
+        container_name: es-slowlog01
+        environment:
+            - cluster.name=es-docker-cluster
+            - network.host=0.0.0.0
+            - node.name=es01
+            - node.master=true
+            - node.data=true
+            - node.ingest=true
+            - discovery.seed_hosts=es01
+            - cluster.initial_master_nodes=es01
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        mem_limit: 1g
+        ports:
+            - "9200:9200/tcp"
+        networks:
+            spark-nw:
+                ipv4_address: 172.30.10.1
+        volumes:
+            - elasticsearch1-data:/usr/share/elasticsearch/data
+            - elasticsearch1-logs:/usr/share/elasticsearch/logs
+        extra_hosts:
+            - "doc-kibana101:172.30.20.1"
+
+    kibana:
+        image: docker.elastic.co/kibana/kibana:7.8.1
+        hostname: doc-kibana101
+        container_name: kibana-slowlog1
+        environment:
+            SERVER_NAME: "kibana"
+            ELASTICSEARCH_HOSTS: "http://doc-elastic101:9200"
+            ELASTICSEARCH_REQUESTTIMEOUT: "60000"
+        ports:
+            - "5601:5601/tcp"
+        mem_limit: 1g
+        networks:
+            spark-nw:
+                ipv4_address: 172.30.20.1
+        extra_hosts:
+            - "doc-elastic101:172.30.10.1"
+        depends_on:
+            - elasticsearch
+
+    filebeat:
+        build: ./filebeat
+        hostname: doc-filebeat101
+        container_name: filebeat-slowlog1
+        mem_limit: 512m
+        networks:
+            spark-nw:
+                ipv4_address: 172.30.30.1
+        volumes:
+            - elasticsearch1-data:/usr/share/elasticsearch/data
+            - elasticsearch1-logs:/usr/share/elasticsearch/logs
+        extra_hosts:
+            - "doc-elastic101:172.30.10.1"
+            - "doc-kibana101:172.30.20.1"
+        depends_on:
+            - elasticsearch
+
+volumes:
+    elasticsearch1-data:
+        driver: local
+    elasticsearch1-logs:
+        driver: local
+
+networks:
+    spark-nw:
+        external: true

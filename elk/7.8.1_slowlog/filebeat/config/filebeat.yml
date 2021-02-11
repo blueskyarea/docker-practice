@@ -1,0 +1,25 @@
+#https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-reference-yml.html
+filebeat.modules:
+- module: elasticsearch
+
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /usr/share/elasticsearch/logs/es-docker-cluster_index_search_slowlog.log
+
+# FilebeatのConfig設定
+filebeat.config.modules:
+  enabled: true
+  path: ${path.config}/modules.d/*.yml
+
+# Output先の設定
+output.elasticsearch:
+  hosts: ["172.30.10.1:9200"]
+  index: "slowlog-%{[agent.version]}-%{+yyyy.MM.dd}"
+
+setup.template.name: "slowlog"
+setup.template.pattern: "slowlog-*"
+
+setup.kibana:
+  host: "172.30.20.1:5601"

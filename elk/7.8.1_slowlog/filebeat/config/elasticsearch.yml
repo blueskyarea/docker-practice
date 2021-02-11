@@ -1,0 +1,18 @@
+#https://www.elastic.co/guide/en/beats/filebeat/master/filebeat-module-elasticsearch.html
+  server:
+    enabled: true
+    var.paths:
+      - /usr/share/elasticsearch/logs/*.log          # Plain text logs
+      - /usr/share/elasticsearch/logs/*_server.json  # JSON logs
+
+  gc:
+    var.paths:
+      - /usr/share/elasticsearch/logs/gc.log.[0-9]*
+      - /usr/share/elasticsearch/logs/gc.log
+
+  slowlog:
+    var.paths:
+      - /usr/share/elasticsearch/logs/*_index_search_slowlog.log     # Plain text logs
+      - /usr/share/elasticsearch/logs/*_index_indexing_slowlog.log   # Plain text logs
+      - /usr/share/elasticsearch/logs/*_index_search_slowlog.json    # JSON logs
+      - /usr/share/elasticsearch/logs/*_index_indexing_slowlog.json  # JSON logs
