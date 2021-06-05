@@ -1,19 +1,7 @@
-FROM centos:centos6
-LABEL  maintainer "blueskyarea"
+FROM mysql:5.7
+LABEL maintainer "blueskyarea"
+ 
+ENV MYSQL_ROOT_PASSWORD=blueskyarea
 
-USER root
-
-# install dev tools
-RUN yum clean all; \
-    rpm --rebuilddb; \
-    yum install -y curl which tar sudo openssh-server openssh-clients rsync
-RUN yum update -y libselinux
-
-# mysql repo
-RUN rpm -ihv http://dev.mysql.com/get/mysql57-community-release-el6-7.noarch.rpm
-RUN yum --disablerepo=\* --enablerepo='mysql57-community*' list available
-
-# mysql install
-RUN yum --enablerepo='mysql57-community*' install -y mysql-community-server
-
-
+COPY conf/my.cnf /etc/mysql/conf.d/my.cnf
+COPY data/world.sql.gz /docker-entrypoint-initdb.d/world.sql.gz
