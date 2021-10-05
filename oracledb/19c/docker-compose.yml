@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  # Oracle DB1
+  myora1:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: myoracledb
+    hostname: myora1
+    container_name: container-myora1
+    ports:
+      - "1521:1521"
+    mem_limit: 1g
+    networks:
+      oracle_nw:
+        ipv4_address: 172.50.0.2
+
+networks:
+  oracle_nw:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.50.0.0/16
+          gateway: 172.50.0.254 
