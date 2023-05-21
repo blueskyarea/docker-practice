@@ -1,0 +1,53 @@
+version: '2'
+
+services:
+  hbase-master:
+    build:
+      context: .
+      dockerfile: ./base/Dockerfile
+    image: blueskyareahm/hbase-base:2.1.3
+    command: master
+    ports:
+      - 16000:16000
+      - 16010:16010
+
+  hbase-regionserver:
+    build:
+      context: .
+      dockerfile: ./base/Dockerfile
+    image: blueskyareahm/hbase-base:2.1.3
+    command: regionserver
+    ports:
+      - 16030:16030
+      - 16201:16201
+      - 16301:16301
+ 
+  hbase-thrift:
+    build:
+      context: .
+      dockerfile: ./base/Dockerfile
+    image: blueskyareahm/hbase-base:2.1.3
+    command: thrift
+    ports:
+      - 9090:9090
+      - 9095:9095
+
+  hbase-rest:
+    build:
+      context: .
+      dockerfile: ./base/Dockerfile
+    image: blueskyareahm/hbase-base:2.1.3
+    command: rest
+    ports:
+      - 8080:8080
+      - 8085:8085
+ 
+  zookeeper:
+    build:
+      context: .
+      dockerfile: ./zookeeper/Dockerfile
+    image: blueskyareahm/hbase-zookeeper:3.4.13
+    ports:
+      - 2181:2181
+      - 3181:3181
+      - 4181:4181

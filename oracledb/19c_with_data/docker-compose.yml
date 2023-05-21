@@ -1,0 +1,14 @@
+version: '3'
+services:
+  do:
+    image: blueskyareahm/oracledb19practice:1.0
+    container_name: myoracledb19
+    ports:
+      - 1521:1521
+      - 5500:5500
+    volumes:
+      - ./oradata:/opt/oracle/oradata
+      - ./startup:/opt/oracle/scripts/startup
+    environment:
+      - ORACLE_PWD=oraclepass
+      - ORACLE_PDB=ORCLPDB1

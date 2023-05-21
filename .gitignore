@@ -1,2 +1,5 @@
-5.7.25/data/created_data.csv
+mysql/5.7.25/data/created_data.csv
+mysql/5.7/backup/
 elk/7.9.0/passwords
+oracledb/19c/installer/oracle-database-ee-19c-1.0-1.x86_64.rpm
+oracledb/19c_with_data/oradata
