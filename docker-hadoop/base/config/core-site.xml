@@ -1,0 +1,6 @@
+<configuration>
+  <property>
+    <name>fs.default.name</name>
+    <value>hdfs://doc-hmaster101.local:9000</value>
+  </property>
+</configuration>

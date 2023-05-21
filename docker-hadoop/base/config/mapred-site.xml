@@ -1,0 +1,27 @@
+<configuration>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+    <property>
+        <name>yarn.app.mapreduce.am.env</name>
+        <value>HADOOP_MAPRED_HOME=/opt/hadoop/current</value>
+    </property>
+    <property>
+        <name>mapreduce.map.env</name>
+        <value>HADOOP_MAPRED_HOME=/opt/hadoop/current</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.env</name>
+        <value>HADOOP_MAPRED_HOME=/opt/hadoop/current</value>
+    </property>
+    <!-- To avoid 2.4 GB of 2.1 GB virtual memory used. Killing container--> 
+    <property>
+        <name>mapreduce.map.java.opts</name>
+        <value>-XX:ReservedCodeCacheSize=100M -XX:MaxMetaspaceSize=256m -XX:CompressedClassSpaceSize=256m -Xmx1536m -Xms512m</value>
+    </property> 
+    <property>
+        <name>mapreduce.reduce.java.opts</name>
+        <value>-XX:ReservedCodeCacheSize=100M -XX:MaxMetaspaceSize=256m -XX:CompressedClassSpaceSize=256m -Xmx1536m -Xms512m</value>
+    </property> 
+</configuration>

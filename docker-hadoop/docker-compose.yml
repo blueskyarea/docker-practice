@@ -1,0 +1,52 @@
+version: '2'
+
+services:
+  # Hadoop-master
+  hmaster101:
+    build: 
+      context: .
+      dockerfile: ./base/Dockerfile
+    image: hadoop-base
+    hostname: doc-hmaster101.local
+    container_name: hmaster101
+    ports:
+      - "9000:9000"
+      - "9870:9870"
+      - "50070:50070"
+      - "8040:8040"
+      - "8088:8088"
+      - "19888:19888"
+    mem_limit: 1g
+    networks:
+      hadoop_nw:
+        ipv4_address: 172.30.0.2
+    extra_hosts:
+      - "doc-hslave101.local:172.30.0.3"
+    environment:
+      TAG: HMASTER
+  
+  # Hadoop-slave
+  hslave101:
+    build: 
+      context: .
+      dockerfile: ./base/Dockerfile
+    image: hadoop-base
+    hostname: doc-hslave101.local
+    container_name: hslave101
+    mem_limit: 2g
+    networks:
+      hadoop_nw:
+        ipv4_address: 172.30.0.3
+    extra_hosts:
+      - "doc-hmaster101.local:172.30.0.2"
+    environment:
+      TAG: HSLAVE
+
+networks:
+  hadoop_nw:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.30.0.0/16
+          gateway: 172.30.0.254
